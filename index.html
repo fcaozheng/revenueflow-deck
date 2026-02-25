@@ -994,6 +994,43 @@ h3 {
   background: rgba(255,255,255,0.6);
 }
 
+/* ===== ARROW NAVIGATION ===== */
+.nav-arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  background: rgba(26, 26, 46, 0.6);
+  color: white;
+  border: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s;
+  opacity: 0.7;
+}
+
+.nav-arrow:hover {
+  background: rgba(26, 26, 46, 0.9);
+  opacity: 1;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.nav-arrow.prev { left: 20px; }
+.nav-arrow.next { right: 20px; }
+
+.nav-arrow:disabled {
+  opacity: 0.2;
+  cursor: default;
+  pointer-events: none;
+}
+
 /* ===== FULLSCREEN BUTTON ===== */
 .fullscreen-btn {
   position: fixed;
@@ -2052,6 +2089,8 @@ h3 {
 </div><!-- /deck -->
 
 <!-- Navigation -->
+<button class="nav-arrow prev" id="prevBtn" title="Previous slide">&#8249;</button>
+<button class="nav-arrow next" id="nextBtn" title="Next slide">&#8250;</button>
 <div class="nav-dots" id="navDots"></div>
 <div class="slide-num" id="slideNum">1 / 10</div>
 <button class="fullscreen-btn" id="fullscreenBtn" title="Press F for fullscreen">⛶ Fullscreen</button>
@@ -2064,6 +2103,11 @@ h3 {
   const slides = document.querySelectorAll('.slide');
   const navDots = document.getElementById('navDots');
   const slideNum = document.getElementById('slideNum');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
 
   // Build dots
   for (let i = 1; i <= TOTAL; i++) {
@@ -2081,6 +2125,8 @@ h3 {
     document.querySelectorAll('.nav-dot').forEach(d => d.classList.toggle('active', +d.dataset.slide === n));
     slideNum.textContent = `${n} / ${TOTAL}`;
     current = n;
+    prevBtn.disabled = (n === 1);
+    nextBtn.disabled = (n === TOTAL);
   }
 
   // Keyboard nav
@@ -2132,6 +2178,8 @@ h3 {
     navDots.style.opacity = '1';
     slideNum.style.opacity = '1';
     document.getElementById('fullscreenBtn').style.opacity = '1';
+    prevBtn.style.opacity = '0.7';
+    nextBtn.style.opacity = '0.7';
     clearTimeout(idleTimer);
     idleTimer = setTimeout(hideUI, 3000);
   }
@@ -2141,13 +2189,18 @@ h3 {
       navDots.style.opacity = '0';
       slideNum.style.opacity = '0';
       document.getElementById('fullscreenBtn').style.opacity = '0';
+      prevBtn.style.opacity = '0';
+      nextBtn.style.opacity = '0';
     }
   }
   document.addEventListener('mousemove', showUI);
   document.addEventListener('keydown', showUI);
 
   // Style transitions for nav hiding
-  [navDots, slideNum, document.getElementById('fullscreenBtn')].forEach(el => {
+  // Set initial arrow state
+  prevBtn.disabled = true;
+
+  [navDots, slideNum, document.getElementById('fullscreenBtn'), prevBtn, nextBtn].forEach(el => {
     el.style.transition = 'opacity 0.5s';
   });
 })();
