@@ -1,0 +1,2152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RevenueFlow — AI-Native GTM Playbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #FAFAF5;
+  --bg-card: #FFFFFF;
+  --bg-section: #F2F0E8;
+  --bg-muted: #F7F6F2;
+  --navy: #1A1A2E;
+  --navy-light: #2A2A45;
+  --gold: #D4A843;
+  --gold-light: #F0DCA0;
+  --gold-dark: #B08A2E;
+  --accent: #927F56;
+  --accent-light: #C4B896;
+  --green: #5B8A72;
+  --green-light: #D4E8DC;
+  --red: #C44E4E;
+  --red-light: #F5D4D4;
+  --text: #1A1A2E;
+  --text-secondary: #4A4A5A;
+  --text-muted: #8A8A9A;
+  --border: rgba(0,0,0,0.08);
+  --border-strong: rgba(0,0,0,0.15);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 100px;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #000;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* ===== SLIDE CONTAINER ===== */
+.deck {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  overflow: hidden;
+}
+
+.slide::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.slide > * { position: relative; z-index: 1; }
+
+.slide.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ===== SLIDE HEADER BAR ===== */
+.slide-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 60px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.slide-header .logo {
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.slide-header .badge {
+  display: inline-flex;
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  background: var(--navy);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* ===== SLIDE CONTENT ===== */
+.slide-body {
+  flex: 1;
+  padding: 48px 60px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.slide-body.centered {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.slide-body.two-col {
+  flex-direction: row;
+  gap: 48px;
+  align-items: stretch;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1 {
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--navy);
+  letter-spacing: -1px;
+}
+
+h2 {
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--navy);
+  letter-spacing: -0.5px;
+}
+
+h3 {
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--navy);
+}
+
+.subtitle {
+  font-size: clamp(16px, 1.5vw, 20px);
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 720px;
+}
+
+.highlight { color: var(--gold); }
+.highlight-green { color: var(--green); }
+.highlight-red { color: var(--red); }
+
+.pullquote {
+  font-size: clamp(16px, 1.4vw, 19px);
+  font-weight: 600;
+  font-style: italic;
+  color: var(--gold-dark);
+  border-left: 4px solid var(--gold);
+  padding: 16px 24px;
+  background: rgba(212, 168, 67, 0.08);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 16px 0;
+  line-height: 1.5;
+}
+
+/* ===== CARDS ===== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-dark {
+  background: var(--navy);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 24px;
+}
+
+.card-gold {
+  background: linear-gradient(135deg, #FFF8F4 0%, #F5EDE8 100%);
+  border: 2px solid var(--gold-light);
+  border-radius: var(--radius-md);
+  padding: 24px;
+}
+
+.card-red {
+  background: #FFF5F5;
+  border: 1px solid rgba(196, 78, 78, 0.2);
+  border-left: 4px solid var(--red);
+  border-radius: var(--radius-md);
+  padding: 24px;
+}
+
+.card-green {
+  background: #F5FFF8;
+  border: 1px solid rgba(91, 138, 114, 0.2);
+  border-left: 4px solid var(--green);
+  border-radius: var(--radius-md);
+  padding: 24px;
+}
+
+/* ===== TABLES ===== */
+.cost-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.cost-table th, .cost-table td {
+  padding: 14px 20px;
+  text-align: left;
+  font-size: 15px;
+}
+
+.cost-table thead th {
+  background: var(--navy);
+  color: white;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.cost-table tbody tr {
+  background: white;
+  border-bottom: 1px solid var(--border);
+}
+
+.cost-table tbody tr:nth-child(even) {
+  background: var(--bg-muted);
+}
+
+.cost-table tbody tr:last-child {
+  background: var(--gold);
+  color: white;
+  font-weight: 700;
+}
+
+.cost-table tbody tr:last-child td {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+/* ===== COMPARISON TABLE (Slide 9) ===== */
+.compare-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.compare-table th, .compare-table td {
+  padding: 12px 20px;
+  text-align: left;
+  font-size: 15px;
+}
+
+.compare-table thead th {
+  background: var(--navy);
+  color: white;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.compare-table .col-old { color: var(--text-muted); }
+.compare-table .col-new { color: var(--green); font-weight: 700; }
+
+.compare-table tbody tr {
+  background: white;
+  border-bottom: 1px solid var(--border);
+}
+
+.compare-table tbody tr:last-child {
+  background: var(--bg-section);
+  font-weight: 800;
+}
+
+.compare-table tbody tr:last-child .col-old {
+  color: var(--red);
+  font-size: 17px;
+}
+
+.compare-table tbody tr:last-child .col-new {
+  color: var(--green);
+  font-size: 17px;
+}
+
+/* ===== GRID LAYOUTS ===== */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+.grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px; }
+
+/* ===== TIER CARDS ===== */
+.tier-card {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  transition: transform 0.2s;
+}
+
+.tier-card.recommended {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(212, 168, 67, 0.15), var(--shadow-lg);
+  transform: scale(1.03);
+}
+
+.tier-card .tier-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gold);
+  color: white;
+  padding: 4px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tier-card .tier-name {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.tier-card .tier-price {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--gold);
+}
+
+.tier-card .tier-price span {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.tier-card .tier-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.tier-card ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tier-card ul li {
+  font-size: 14px;
+  color: var(--text-secondary);
+  padding-left: 20px;
+  position: relative;
+}
+
+.tier-card ul li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--green);
+  font-weight: 700;
+}
+
+/* ===== FLOW DIAGRAM ===== */
+.flow-node {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+.flow-node.primary {
+  background: var(--navy);
+  color: white;
+  border: none;
+}
+
+.flow-node.gold {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+  color: white;
+  border: none;
+}
+
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: var(--gold);
+  padding: 8px 0;
+}
+
+.flow-arrow-h {
+  font-size: 24px;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== TOOL LAYER ===== */
+.tool-layer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: 10px;
+}
+
+.tool-layer .layer-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  width: 140px;
+  flex-shrink: 0;
+}
+
+.tool-layer .layer-tools {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.tool-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-section);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.tool-layer.orchestration {
+  background: var(--navy);
+  border: 2px solid var(--gold);
+}
+
+.tool-layer.orchestration .layer-label {
+  color: var(--gold);
+}
+
+.tool-layer.orchestration .tool-pill {
+  background: rgba(212, 168, 67, 0.25);
+  border-color: var(--gold);
+  color: white;
+}
+
+/* ===== CASE STUDY CARDS ===== */
+.case-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: var(--shadow-md);
+}
+
+.case-card .case-industry {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-section);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.case-card .case-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.case-card .case-stat {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.case-card .case-stat-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.case-card .case-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ===== BELIEF CARDS ===== */
+.belief-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.belief-card .belief-header {
+  background: var(--red-light);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.belief-card .belief-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--red);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.belief-card .belief-false {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--red);
+}
+
+.belief-card .belief-body {
+  padding: 16px 20px;
+}
+
+.belief-card .belief-reality {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ===== AGENCY FAIL CARDS ===== */
+.fail-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: var(--shadow-sm);
+}
+
+.fail-card .fail-icon {
+  font-size: 28px;
+}
+
+.fail-card .fail-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.fail-card .fail-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.fail-card .fail-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fail-card .fail-bullets li {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  padding-left: 16px;
+  position: relative;
+}
+
+.fail-card .fail-bullets li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--red);
+  font-weight: 700;
+}
+
+/* ===== LEGACY TOOL PILLS (faded/crossed-out) ===== */
+.tool-pill-legacy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: #F0EDED;
+  border: 1px solid rgba(196, 78, 78, 0.2);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.tool-pill-new {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--green-light);
+  border: 1px solid rgba(91, 138, 114, 0.3);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--green);
+  white-space: nowrap;
+}
+
+/* ===== COST CALLOUT ===== */
+.cost-callout {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #FFF5F5;
+  border: 2px solid var(--red);
+  border-radius: var(--radius-lg);
+  padding: 16px 24px;
+  margin-top: 16px;
+}
+
+.cost-callout .callout-amount {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--red);
+  white-space: nowrap;
+}
+
+.cost-callout .callout-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* ===== GTM ENGINE FUNNEL ===== */
+.engine-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  position: relative;
+}
+
+.engine-node {
+  border-radius: var(--radius-md);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.engine-node .node-tools {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.engine-node .node-tools .tool-pill {
+  font-size: 11px;
+  padding: 3px 10px;
+}
+
+.engine-node .node-text h4 {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.engine-node .node-text p {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: 2px;
+}
+
+/* ===== SCREENSHOT CARDS ===== */
+.screenshot-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s;
+}
+
+.screenshot-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.screenshot-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-bottom: 1px solid var(--border);
+}
+
+.screenshot-card .screenshot-info {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.screenshot-card .screenshot-author {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.screenshot-card .screenshot-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.screenshot-card .screenshot-title {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ===== CASE STUDY LINKS ===== */
+.case-links {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.case-link {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gold-dark);
+  text-decoration: none;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(212, 168, 67, 0.1);
+  border: 1px solid rgba(212, 168, 67, 0.2);
+  transition: background 0.2s;
+}
+
+.case-link:hover {
+  background: rgba(212, 168, 67, 0.2);
+}
+
+/* ===== TWO-COL OFFER ===== */
+.offer-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ===== VS LAYOUT ===== */
+.vs-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.vs-col.old {
+  opacity: 0.7;
+}
+
+.vs-label {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.vs-label.old-label {
+  background: #E8E8EC;
+  color: var(--text-muted);
+}
+
+.vs-label.new-label {
+  background: var(--gold);
+  color: white;
+}
+
+.vs-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.vs-item .vs-bullet {
+  flex-shrink: 0;
+  font-size: 16px;
+  margin-top: 2px;
+}
+
+.vs-divider {
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, var(--border-strong) 20%, var(--border-strong) 80%, transparent);
+  flex-shrink: 0;
+}
+
+/* ===== WIN BADGES ===== */
+.win-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.win-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  background: var(--green-light);
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ===== GUARANTEE ===== */
+.guarantee {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(135deg, #1A1A2E, #2A2A45);
+  color: white;
+  padding: 20px 28px;
+  border-radius: var(--radius-lg);
+  margin-top: 12px;
+}
+
+.guarantee .shield {
+  font-size: 36px;
+  flex-shrink: 0;
+}
+
+.guarantee .guarantee-text {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.guarantee .guarantee-text .gold {
+  color: var(--gold-light);
+}
+
+/* ===== SLIDE FOOTER ===== */
+.slide-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 60px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.5);
+}
+
+.slide-footer .footer-brand {
+  display: flex;
+  align-items: center;
+}
+
+.slide-footer .footer-brand img {
+  height: 28px;
+  opacity: 0.5;
+  filter: grayscale(100%);
+}
+
+.slide-footer .footer-url {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ===== NAVIGATION DOTS ===== */
+.nav-dots {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+  padding: 8px 16px;
+  background: rgba(26, 26, 46, 0.8);
+  border-radius: var(--radius-pill);
+  backdrop-filter: blur(10px);
+}
+
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+  padding: 0;
+}
+
+.nav-dot.active {
+  background: var(--gold);
+  transform: scale(1.3);
+}
+
+.nav-dot:hover {
+  background: rgba(255,255,255,0.6);
+}
+
+/* ===== FULLSCREEN BUTTON ===== */
+.fullscreen-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
+  background: rgba(26, 26, 46, 0.7);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  transition: opacity 0.3s;
+  font-family: 'Inter', sans-serif;
+}
+
+.fullscreen-btn:hover { opacity: 0.8; }
+
+/* ===== SLIDE NUMBER ===== */
+.slide-num {
+  position: fixed;
+  bottom: 20px;
+  right: 24px;
+  z-index: 100;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  background: rgba(26,26,46,0.6);
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  backdrop-filter: blur(10px);
+}
+
+/* ===== SPACER HELPERS ===== */
+.mt-sm { margin-top: 12px; }
+.mt-md { margin-top: 24px; }
+.mt-lg { margin-top: 36px; }
+.mb-sm { margin-bottom: 12px; }
+.mb-md { margin-bottom: 24px; }
+.gap-sm { gap: 12px; }
+.gap-md { gap: 24px; }
+
+/* ===== ALLBOUND FLOW ===== */
+.allbound-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+}
+
+.allbound-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.allbound-node {
+  border-radius: var(--radius-md);
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.allbound-node.signal {
+  background: var(--navy);
+  color: white;
+}
+
+.allbound-node.enrich {
+  background: var(--navy-light);
+  color: white;
+}
+
+.allbound-node .node-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.allbound-node .node-text h4 {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.allbound-node .node-text p {
+  font-size: 13px;
+  opacity: 0.8;
+  margin-top: 2px;
+}
+
+.channel-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.channel-card {
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.channel-card.email-ch {
+  background: white;
+  border: 2px solid var(--gold-light);
+}
+
+.channel-card.linkedin-ch {
+  background: white;
+  border: 2px solid #0A66C2;
+}
+
+.channel-card .ch-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.channel-card .ch-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.channel-card .ch-stat {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.meetings-node {
+  background: var(--gold);
+  color: white;
+  border-radius: var(--radius-md);
+  padding: 16px 24px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.content-node {
+  background: linear-gradient(135deg, #FFF8F4 0%, #F5EDE8 100%);
+  border: 2px dashed var(--gold);
+  border-radius: var(--radius-md);
+  padding: 18px 24px;
+}
+
+.content-node h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gold-dark);
+}
+
+.content-node p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+.flow-connector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 0;
+  color: var(--gold);
+  font-size: 20px;
+}
+
+/* ===== AGGREGATE STAT BAR ===== */
+.agg-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 16px 32px;
+  background: var(--navy);
+  border-radius: var(--radius-lg);
+  color: white;
+}
+
+.agg-bar .agg-num {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--gold-light);
+}
+
+.agg-bar .agg-label {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* ===== CONTENT PROOF CARDS ===== */
+.proof-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+  max-width: 900px;
+}
+
+.proof-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s;
+}
+
+.proof-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.proof-card .proof-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.proof-card .proof-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 16px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.proof-card .proof-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.proof-card .proof-title {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.proof-card .proof-hook {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.proof-card .proof-stats {
+  display: flex;
+  gap: 16px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.proof-card .proof-stat {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.proof-card .proof-stat span {
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.proof-card .proof-link {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  background: #0A66C2;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  transition: opacity 0.2s;
+}
+
+.proof-card .proof-link:hover {
+  opacity: 0.85;
+}
+
+@media (max-width: 900px) {
+  .proof-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== RESPONSIVE (minor) ===== */
+@media (max-width: 900px) {
+  .slide-body { padding: 32px 32px; }
+  .slide-header, .slide-footer { padding-left: 32px; padding-right: 32px; }
+  .grid-3 { grid-template-columns: 1fr; }
+  .grid-4 { grid-template-columns: 1fr 1fr; }
+  .channel-row { grid-template-columns: 1fr; }
+  .offer-layout { grid-template-columns: 1fr; }
+  .offer-layout > div:last-child { grid-template-columns: 1fr !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+<!-- ==================== SLIDE 1: TITLE ==================== -->
+<div class="slide active" data-slide="1">
+  <div class="slide-body centered" style="gap: 0;">
+    <div style="font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 24px;">RevenueFlow</div>
+    <h1 style="max-width: 900px; font-size: clamp(40px, 5vw, 64px);">
+      We Are Your<br><span class="highlight">AI-Native GTM Partner.</span>
+    </h1>
+    <div style="max-width: 800px; margin-top: 32px; display: flex; flex-direction: column; gap: 16px;">
+      <div style="font-size: clamp(17px, 1.6vw, 21px); font-weight: 500; line-height: 1.6; color: var(--text-secondary);">
+        A GTM partnership that moves at the <span style="color: var(--gold); font-weight: 800;">speed of AI development.</span>
+      </div>
+      <div style="font-size: clamp(17px, 1.6vw, 21px); font-weight: 500; line-height: 1.6; color: var(--text-muted);">
+        The rest are <span style="color: var(--red); font-weight: 700;">spending more for less.</span>
+      </div>
+    </div>
+    <div style="margin-top: 40px; display: flex; gap: 16px; align-items: center;">
+      <div style="padding: 10px 28px; background: var(--navy); color: white; border-radius: var(--radius-pill); font-size: 14px; font-weight: 700; letter-spacing: 0.5px;">More Pipeline</div>
+      <div style="padding: 10px 28px; background: var(--gold); color: white; border-radius: var(--radius-pill); font-size: 14px; font-weight: 700; letter-spacing: 0.5px;">Operational Efficiency</div>
+      <div style="padding: 10px 28px; background: var(--bg-section); border: 1px solid var(--border); border-radius: var(--radius-pill); font-size: 14px; font-weight: 600; color: var(--text-secondary);">AI-First Adaptability</div>
+      <div style="padding: 10px 28px; background: var(--bg-section); border: 1px solid var(--border); border-radius: var(--radius-pill); font-size: 14px; font-weight: 600; color: var(--text-secondary);">Zero New Headcount</div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="footer-brand"><img src="revenueflow_logo_v2_transparent.png" alt="RevenueFlow"></div>
+    <div class="footer-url">revenueflow.com</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 2: THE FAULTY BELIEFS ==================== -->
+<div class="slide" data-slide="2">
+  <div class="slide-header">
+    <div class="logo">RevenueFlow</div>
+    <div class="badge">Playbook</div>
+  </div>
+  <div class="slide-body">
+    <h2>3 beliefs that are costing you <span class="highlight-red">$300K+/year</span></h2>
+    <div class="grid-3 mt-md" style="align-items: start;">
+      <div class="belief-card">
+        <div class="belief-header">
+          <div class="belief-num">1</div>
+          <div class="belief-false">"We need more SDRs to grow"</div>
+        </div>
+        <div class="belief-body">
+          <div class="belief-reality">You need better systems, not more people. 1 GTM engineer + AI outperforms 5 SDRs at 1/5th the cost. Adding headcount is the most expensive, slowest way to scale pipeline.</div>
+        </div>
+      </div>
+      <div class="belief-card">
+        <div class="belief-header">
+          <div class="belief-num">2</div>
+          <div class="belief-false">"Our enterprise toolstack is an asset"</div>
+        </div>
+        <div class="belief-body">
+          <div class="belief-reality">It's a liability. You're paying $60-120K/year for tools your team uses 10% of. The new stack is API-first, pay-per-use, and 10x more powerful.</div>
+        </div>
+      </div>
+      <div class="belief-card">
+        <div class="belief-header">
+          <div class="belief-num">3</div>
+          <div class="belief-false">"We just need a lead gen agency"</div>
+        </div>
+        <div class="belief-body">
+          <div class="belief-reality">Lead gen agencies are a tap you turn on and off. They spam one channel, burn your domain, and leave. Pipeline needs trust + precision + multiple touchpoints.</div>
+        </div>
+      </div>
+    </div>
+    <div class="pullquote mt-md">
+      "It's like hiring 5 people to manually sort mail when you could install a machine that sorts 5,000 letters an hour. The old approach isn't just slower - it's a fundamentally different category of solution."
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="footer-brand"><img src="revenueflow_logo_v2_transparent.png" alt="RevenueFlow"></div>
+    <div class="footer-url">revenueflow.com</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 3: WHAT YOU'RE ACTUALLY SPENDING ==================== -->
+<div class="slide" data-slide="3">
+  <div class="slide-header">
+    <div class="logo">RevenueFlow</div>
+    <div class="badge">Playbook</div>
+  </div>
+  <div class="slide-body">
+    <h2>What your GTM <span class="highlight-red">actually</span> costs</h2>
+    <div class="subtitle mb-md">The real price of the "traditional" approach, fully loaded.</div>
+
+    <table class="cost-table" style="max-width: 700px;">
+      <thead>
+        <tr>
+          <th>Line Item</th>
+          <th style="text-align: right;">Annual Cost</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>👥 2 SDRs (base $80K + commission)</td>
+          <td style="text-align: right;">$200K+</td>
+        </tr>
+        <tr>
+          <td>🔧 Enterprise tools (ZoomInfo, Outreach, SalesLoft, HubSpot)</td>
+          <td style="text-align: right;">$60-120K</td>
+        </tr>
+        <tr>
+          <td>📋 Management overhead (SDR manager, training, ramp)</td>
+          <td style="text-align: right;">$80K+</td>
+        </tr>
+        <tr>
+          <td>💸 Wasted outbound spend (failed vendors, burned domains)</td>
+          <td style="text-align: right;">$15-25K</td>
+        </tr>
+        <tr>
+          <td>🔒 Abandoned tools (12-month contracts you can't escape)</td>
+          <td style="text-align: right;">$10-20K</td>
+        </tr>
+        <tr>
+          <td>🏢 Failed agency spend (no results, no refund)</td>
+          <td style="text-align: right;">$10-15K</td>
+        </tr>
+        <tr>
+          <td style="font-weight: 800;">Total: Your Current GTM</td>
+          <td style="text-align: right;">$375-460K/year</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Legacy tool pills -->
+    <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; max-width: 700px; align-items: center;">
+      <span style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-right: 4px;">The stack bleeding money:</span>
+      <span class="tool-pill-legacy">ZoomInfo</span>
+      <span class="tool-pill-legacy">Outreach</span>
+      <span class="tool-pill-legacy">SalesLoft</span>
+      <span class="tool-pill-legacy">HubSpot</span>
+      <span class="tool-pill-legacy">Salesforce</span>
+      <span class="tool-pill-legacy">Pipedrive</span>
+    </div>
+
+    <!-- Cost callout -->
+    <div class="cost-callout" style="max-width: 700px;">
+      <div class="callout-amount">$375-460K</div>
+      <div class="callout-text">...and it's still not predictable. You can't tell me exactly how many meetings you'll book next month.</div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="footer-brand"><img src="revenueflow_logo_v2_transparent.png" alt="RevenueFlow"></div>
+    <div class="footer-url">revenueflow.com</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 4: WHY LEAD GEN AGENCIES DON'T WORK ==================== -->
+<div class="slide" data-slide="4">
+  <div class="slide-header">
+    <div class="logo">RevenueFlow</div>
+    <div class="badge">Playbook</div>
+  </div>
+  <div class="slide-body">
+    <h2>The lead gen agency model is <span class="highlight-red">broken.</span></h2>
+    <div class="subtitle mb-md">Here's what traditional agencies get wrong.</div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start;">
+      <div class="fail-card">
+        <div class="fail-icon">📢</div>
+        <div class="fail-title">One channel, one trick</div>
+        <ul class="fail-bullets">
+          <li>Cold email only, no backup plan</li>
+          <li>When prospects stop responding, they're stuck</li>
+          <li>No LinkedIn, no content, no signals</li>
+        </ul>
+      </div>
+      <div class="fail-card">
+        <div class="fail-icon">🧰</div>
+        <div class="fail-title">Legacy tools</div>
+        <ul class="fail-bullets">
+          <li>Apollo, ZoomInfo, basic sequences</li>
+          <li>Same tools everyone else uses</li>
+          <li>No AI, no custom automation</li>
+        </ul>
+      </div>
+      <div class="fail-card">
+        <div class="fail-icon">🎯</div>
+        <div class="fail-title">Poor ICP qualification</div>
+        <ul class="fail-bullets">
+          <li>Spray-and-pray lead lists</li>
+          <li>No signal-based targeting</li>
+          <li>Quantity over quality every time</li>
+        </ul>
+      </div>
+      <div class="fail-card">
+        <div class="fail-icon">📋</div>
+        <div class="fail-title">Zero personalization at scale</div>
+        <ul class="fail-bullets">
+          <li>Same template for every prospect</li>
+          <li>No research, no context</li>
+        </ul>
+      </div>
+      <div class="fail-card">
+        <div class="fail-icon">🔇</div>
+        <div class="fail-title">No trust layer</div>
+        <ul class="fail-bullets">
+          <li>No content, no brand, no social proof</li>
+          <li>Cold outreach without warmth = noise</li>
+        </ul>
+      </div>
+      <div class="fail-card">
+        <div class="fail-icon">⚙️</div>
+        <div class="fail-title">No GTM tech</div>
+        <ul class="fail-bullets">
+          <li>Minimal automation, no AI agents</li>
+          <li>No intent signals or trigger events</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pullquote mt-md">
+      "Acquisition in 2026 requires multi-channel precision + trust. People need to know you BEFORE the first email lands."
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="footer-brand"><img src="revenueflow_logo_v2_transparent.png" alt="RevenueFlow"></div>
+    <div class="footer-url">revenueflow.com</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 5: OLD WAY vs NEW WAY ==================== -->
+<div class="slide" data-slide="5">
+  <div class="slide-header">
+    <div class="logo">RevenueFlow</div>
+    <div class="badge">Playbook</div>
+  </div>
+  <div class="slide-body two-col">
+    <!-- OLD -->
+    <div class="vs-col old">
+      <div class="vs-label old-label">The Old Model</div>
+      <h3 style="color: var(--text-muted);">Linear & Expensive</h3>
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 8px;">
+        <div class="vs-item"><span class="vs-bullet">✕</span><span>5 SDRs doing data entry</span></div>
+        <div class="vs-item"><span class="vs-bullet">✕</span><span>Agency blasting one channel</span></div>
+        <div class="vs-item"><span class="vs-bullet">✕</span><span>Growth = more headcount</span></div>
+        <div class="vs-item"><span class="vs-bullet">✕</span><span>Hire people to do machine work</span></div>
+      </div>
+      <!-- Legacy tool pills -->
+      <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px;">
+        <span class="tool-pill-legacy">ZoomInfo</span>
+        <span class="tool-pill-legacy">Outreach</span>
+        <span class="tool-pill-legacy">SalesLoft</span>
+        <span class="tool-pill-legacy">Pipedrive</span>
+        <span class="tool-pill-legacy">HubSpot</span>
+      </div>
+    </div>
+
+    <div class="vs-divider" style="width: 3px; background: linear-gradient(to bottom, transparent, var(--gold) 20%, var(--gold) 80%, transparent);"></div>
+
+    <!-- NEW -->
+    <div class="vs-col">
+      <div class="vs-label new-label">The New Model</div>
+      <h3>AI-Native <span class="highlight">GTM</span></h3>
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 8px;">
+        <div class="vs-item"><span class="vs-bullet" style="color: var(--green);">✓</span><span>1 GTM engineer + AI orchestration</span></div>
+        <div class="vs-item"><span class="vs-bullet" style="color: var(--green);">✓</span><span>Content builds trust, outbound targets</span></div>
+        <div class="vs-item"><span class="vs-bullet" style="color: var(--green);">✓</span><span>Growth = better architecture</span></div>
+        <div class="vs-item"><span class="vs-bullet" style="color: var(--green);">✓</span><span>Build machines, hire for human work</span></div>
+      </div>
+      <!-- New tool pills -->
+      <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px;">
+        <span class="tool-pill-new">Clay</span>
+        <span class="tool-pill-new">Apollo</span>
+        <span class="tool-pill-new">Instantly</span>
+        <span class="tool-pill-new">Anthropic</span>
+        <span class="tool-pill-new">OpenAI</span>
+        <span class="tool-pill-new">HeyReach</span>
+      </div>
+
+      <div class="win-row mt-sm">
+        <span class="win-badge">SDR costs -80%</span>
+        <span class="win-badge">Tech spend -60%</span>
+        <span class="win-badge">10x volume</span>
+        <span class="win-badge">Zero management overhead</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 0 60px 16px 60px; position: relative; z-index: 1;">
+    <div class="pullquote" style="margin: 0;">
+      "Same pipeline output. Fraction of the cost. And it gets smarter every month."
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="footer-brand"><img src="revenueflow_logo_v2_transparent.png" alt="RevenueFlow"></div>
+    <div class="footer-url">revenueflow.com</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 6: THE GTM ENGINE ==================== -->
+<div class="slide" data-slide="6">
+  <div class="slide-header">
+    <div class="logo">RevenueFlow</div>
+    <div class="badge">Playbook</div>
+  </div>
+  <div class="slide-body" style="padding-top: 20px; padding-bottom: 12px; gap: 0;">
+    <h2 style="font-size: 28px;">The <span class="highlight">GTM Engine</span></h2>
+    <div class="subtitle" style="font-size: 15px; margin-bottom: 12px;">How content, signals, and outbound connect into one system.</div>
+
+    <div style="display: flex; gap: 16px; width: 100%;">
+      <!-- Main funnel -->
+      <div class="engine-flow" style="flex: 1;">
+        <!-- LinkedIn Content (Trust Layer) - TOP -->
+        <div class="content-node" style="padding: 14px 20px; border-style: solid; border-width: 2px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 20px;">📣</span>
+            <div>
+              <h4 style="font-size: 14px; font-weight: 700; color: var(--gold-dark);">LinkedIn Content (Trust Layer)</h4>
+              <p style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">Builds trust + drives inbound + boosts outbound response rates</p>
+            </div>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px;">
+            <span class="tool-pill" style="font-size: 11px; padding: 3px 10px;"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://typefully.com&size=128" style="height: 14px; width: 14px; border-radius: 3px; vertical-align: middle; margin-right: 2px;">Typefully</span>
+            <span class="tool-pill" style="font-size: 11px; padding: 3px 10px;"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://grain.com&size=128" style="height: 14px; width: 14px; border-radius: 3px; vertical-align: middle; margin-right: 2px;">Grain</span>
+          </div>
+        </div>
+
+        <div class="flow-connector" style="padding: 4px 0;">▼</div>
+
+        <!-- Signal Detection -->
+        <div class="engine-node" style="background: var(--navy); color: white; border-radius: var(--radius-md);">
+          <span style="font-size: 20px;">📡</span>
+          <div class="node-text">
+            <h4>Signal Detection + Custom Scraping</h4>
+            <p>Hiring signals, funding, job changes, Google Maps scrapers, LinkedIn job board scrapers, niche industry databases</p>
+            <div class="node-tools" style="margin-top: 4px;">
+              <span class="tool-pill" style="font-size: 11px; padding: 3px 10px; background: rgba(212,168,67,0.25); border-color: var(--gold); color: white;"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://trigify.io&size=128" style="height: 14px; width: 14px; border-radius: 3px; vertical-align: middle; margin-right: 2px; filter: brightness(2);">Trigify</span>
+              <span class="tool-pill" style="font-size: 11px; padding: 3px 10px; background: rgba(212,168,67,0.25); border-color: var(--gold); color: white;"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://linkedin.com&size=128" style="height: 14px; width: 14px; border-radius: 3px; vertical-align: middle; margin-right: 2px;">Sales Nav</span>
+              <span class="tool-pill" style="font-size: 11px; padding: 3px 10px; background: rgba(212,168,67,0.25); border-color: var(--gold); color: white;"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://apollo.io&size=128" style="height: 14px; width: 14px; border-radius: 3px; vertical-align: middle; margin-right: 2px;">Apollo</span>
+              <span class="tool-pill" style="font-size: 11px; padding: 3px 10px; background: rgba(212,168,67,0.25); border-color: var(--gold); color: white;"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://rb2b.com&size=128" style="height: 14px; width: 14px; border-radius: 3px; vertical-align: middle; margin-right: 2px;">RB2B</span>
+              <span class="tool-pill" style="font-size: 11px; padding: 3px 10px; background: rgba(212,168,67,0.25); border-color: var(--gold); color: white;">Custom Scrapers</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flow-connector" style="padding: 4px 0;">▼</div>
+
+        <!-- Enrichment -->
+        <div class="engine-node" style="background: var(--navy-light); color: white; border-radius: var(--radius-md);">
+          <span style="font-size: 20px;">⚙️</span>
+          <div class="node-text">
+            <h4>Enrichment Engine</h4>
+            <p>ICP classify, email find, verify, score</p>
+            <div class="node-tools" style="margin-top: 4px;">
+              <span class="tool-pill" style="font-size: 11px; padding: 3px 10px; background: rgba(212,168,67,0.25); border-color: var(--gold); color: white;"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://clay.com&size=128" style="height: 14px; width: 14px; border-radius: 3px; vertical-align: middle; margin-right: 2px;">Clay</span>
+              <span class="tool-pill" style="font-size: 11px; padding: 3px 10px; background: rgba(212,168,67,0.25); border-color: var(--gold); color: white;"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://apollo.io&size=128" style="height: 14px; width: 14px; border-radius: 3px; vertical-align: middle; margin-right: 2px;">Apollo</span>
+              <span class="tool-pill" style="font-size: 11px; padding: 3px 10px; background: rgba(212,168,67,0.25); border-color: var(--gold); color: white;"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://findymail.com&size=128" style="height: 14px; width: 14px; border-radius: 3px; vertical-align: middle; margin-right: 2px;">Findymail</span>
+              <span class="tool-pill" style="font-size: 11px; padding: 3px 10px; background: rgba(212,168,67,0.25); border-color: var(--gold); color: white;"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://millionverifier.com&size=128" style="height: 14px; width: 14px; border-radius: 3px; vertical-align: middle; margin-right: 2px;">MillionVerifier</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flow-connector" style="padding: 4px 0;">▼</div>
+
+        <!-- AI Copy -->
+        <div class="engine-node" style="background: var(--bg-section); border: 1px solid var(--border); border-radius: var(--radius-md);">
+          <span style="font-size: 20px;">🤖</span>
+          <div class="node-text">
+            <h4 style="color: var(--navy);">AI-Powered Copy</h4>
+            <p style="color: var(--text-secondary);">Personalized at scale, not templated</p>
+            <div class="node-tools" style="margin-top: 4px;">
+              <span class="tool-pill" style="font-size: 11px; padding: 3px 10px;"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://openai.com&size=128" style="height: 14px; width: 14px; border-radius: 3px; vertical-align: middle; margin-right: 2px;">OpenAI</span>
+              <span class="tool-pill" style="font-size: 11px; padding: 3px 10px;"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://anthropic.com&size=128" style="height: 14px; width: 14px; border-radius: 3px; vertical-align: middle; margin-right: 2px;">Anthropic</span>
+              <span class="tool-pill" style="font-size: 11px; padding: 3px 10px;"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://openrouter.ai&size=128" style="height: 14px; width: 14px; border-radius: 3px; vertical-align: middle; margin-right: 2px;">OpenRouter</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flow-connector" style="padding: 4px 0;">▼</div>
+
+        <!-- Outreach Channels -->
+        <div class="channel-row">
+          <div class="channel-card email-ch" style="padding: 12px 16px;">
+            <div class="ch-title" style="font-size: 13px;">Cold Email</div>
+            <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+              <span class="tool-pill" style="font-size: 10px; padding: 2px 8px;"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://instantly.ai&size=128" style="height: 12px; width: 12px; border-radius: 2px; vertical-align: middle; margin-right: 2px;">Instantly</span>
+              <span class="tool-pill" style="font-size: 10px; padding: 2px 8px;"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://emailbison.com&size=128" style="height: 12px; width: 12px; border-radius: 2px; vertical-align: middle; margin-right: 2px;">Email Bison</span>
+              <span class="tool-pill" style="font-size: 10px; padding: 2px 8px;">Zapmail</span>
+              <span class="tool-pill" style="font-size: 10px; padding: 2px 8px;">ScaledMail</span>
+            </div>
+          </div>
+          <div class="channel-card linkedin-ch" style="padding: 12px 16px;">
+            <div class="ch-title" style="font-size: 13px;">LinkedIn Outbound</div>
+            <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+              <span class="tool-pill" style="font-size: 10px; padding: 2px 8px;"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://heyreach.io&size=128" style="height: 12px; width: 12px; border-radius: 2px; vertical-align: middle; margin-right: 2px;">HeyReach</span>
+              <span class="tool-pill" style="font-size: 10px; padding: 2px 8px;"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://expandi.io&size=128" style="height: 12px; width: 12px; border-radius: 2px; vertical-align: middle; margin-right: 2px;">Expandi</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flow-connector" style="padding: 4px 0;">▼</div>
+
+        <!-- Meetings Booked -->
+        <div class="meetings-node" style="padding: 14px 24px; font-size: 15px;">Meetings Booked</div>
+      </div>
+
+      <!-- Flywheel feedback arrow (side) -->
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 40px; position: relative;">
+        <div style="width: 2px; height: 100%; background: linear-gradient(to bottom, var(--gold), var(--gold-light)); position: absolute;"></div>
+        <div style="position: absolute; top: 8px; background: var(--bg); padding: 4px; z-index: 1;">
+          <span style="font-size: 14px; color: var(--gold);">↻</span>
+        </div>
+        <div style="position: absolute; bottom: 8px; background: var(--bg); padding: 4px; z-index: 1;">
+          <span style="font-size: 14px; color: var(--gold);">↑</span>
+        </div>
+        <div style="position: absolute; top: 50%; transform: translateY(-50%) rotate(90deg); background: var(--bg); padding: 2px 6px; z-index: 1; white-space: nowrap;">
+          <span style="font-size: 10px; font-weight: 700; color: var(--gold); letter-spacing: 1px; text-transform: uppercase;">Flywheel</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="footer-brand"><img src="revenueflow_logo_v2_transparent.png" alt="RevenueFlow"></div>
+    <div class="footer-url">revenueflow.com</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 7: THE STACK ==================== -->
+<div class="slide" data-slide="7">
+  <div class="slide-header">
+    <div class="logo">RevenueFlow</div>
+    <div class="badge">Playbook</div>
+  </div>
+  <div class="slide-body" style="padding-top: 28px;">
+    <h2 style="font-size: 28px;">The <span class="highlight">Stack</span></h2>
+    <div class="subtitle" style="font-size: 15px; margin-bottom: 6px;">27+ tools tested over 2.5 years. We're the layer that makes them work together.</div>
+    <div style="font-size: 14px; font-weight: 700; color: var(--gold-dark); margin-bottom: 16px;">We test every week. Tools update weekly. We use what works, drop what doesn't.</div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div class="tool-layer orchestration">
+        <div class="layer-label">Orchestration</div>
+        <div class="layer-tools">
+          <span class="tool-pill">RevenueFlow AI Workflows</span>
+          <span class="tool-pill">Pipeline Logic</span>
+          <span class="tool-pill">Monitoring & Optimization</span>
+        </div>
+      </div>
+
+      <div class="tool-layer">
+        <div class="layer-label">Lead Gen & Data</div>
+        <div class="layer-tools">
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://clay.com&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">Clay</span>
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://apollo.io&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">Apollo</span>
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://findymail.com&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">Findymail</span>
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://millionverifier.com&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">MillionVerifier</span>
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://prospeo.io&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">Prospeo</span>
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://leadmagic.io&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">LeadMagic</span>
+          <span class="tool-pill">Icypeas</span>
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://exa.ai&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">Exa</span>
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://apify.com&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">Apify</span>
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://serper.dev&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">Serper</span>
+        </div>
+      </div>
+
+      <div class="tool-layer">
+        <div class="layer-label">AI & Automation</div>
+        <div class="layer-tools">
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://openai.com&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">OpenAI</span>
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://anthropic.com&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">Anthropic</span>
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://openrouter.ai&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">OpenRouter</span>
+          <span class="tool-pill">Custom Agents</span>
+        </div>
+      </div>
+
+      <div class="tool-layer">
+        <div class="layer-label">Email Infra</div>
+        <div class="layer-tools">
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://emailbison.com&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">Email Bison</span>
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://instantly.ai&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">Instantly</span>
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://heyreach.io&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">HeyReach</span>
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://expandi.io&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">Expandi</span>
+          <span class="tool-pill">Zapmail</span>
+          <span class="tool-pill">ScaledMail</span>
+        </div>
+      </div>
+
+      <div class="tool-layer">
+        <div class="layer-label">Content & Signals</div>
+        <div class="layer-tools">
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://typefully.com&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">Typefully</span>
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://trigify.io&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">Trigify</span>
+          <span class="tool-pill">Engagement Scrapers</span>
+          <span class="tool-pill"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://grain.com&size=128" style="height: 16px; width: 16px; border-radius: 3px; vertical-align: middle; margin-right: 3px;">Grain</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size: 13px; color: var(--text-muted); margin-top: 14px; font-style: italic; line-height: 1.5;">
+      We're not married to any tool. These are examples of what we've tested and validated. The stack evolves as the market does.
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="footer-brand"><img src="revenueflow_logo_v2_transparent.png" alt="RevenueFlow"></div>
+    <div class="footer-url">revenueflow.com</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 8: CONTENT PROOF ==================== -->
+<div class="slide" data-slide="8">
+  <div class="slide-header">
+    <div class="logo">RevenueFlow</div>
+    <div class="badge">Playbook</div>
+  </div>
+  <div class="slide-body centered" style="padding-top: 16px; padding-bottom: 8px;">
+    <h2 style="font-size: 26px;">Our founders' content generates industry engagement and lead flow.</h2>
+    <div class="subtitle" style="margin-bottom: 12px; font-size: 15px;">This is the content engine we build for you.</div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 14px; max-width: 1000px; width: 100%;">
+      <!-- Fernando -->
+      <a href="https://www.linkedin.com/posts/fernandocaozheng_sales-teams-in-2026-dont-need-10-sdrs-anymore-activity-7430597147479130112-tB8j/" target="_blank" style="text-decoration: none; display: block; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+        <img src="linkedin-hosun.png" alt="Hosun Chung LinkedIn post" style="width: 100%; border-radius: var(--radius-sm); box-shadow: var(--shadow-md); border: 1px solid var(--border);">
+      </a>
+
+      <!-- Tim -->
+      <a href="https://www.linkedin.com/posts/timjcarden_gtm-tech-that-actually-matters-in-2026-27-activity-7430597161001799680-60Qo/" target="_blank" style="text-decoration: none; display: block; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+        <img src="linkedin-tim.png" alt="Tim Carden LinkedIn post" style="width: 100%; border-radius: var(--radius-sm); box-shadow: var(--shadow-md); border: 1px solid var(--border);">
+      </a>
+
+      <!-- Ben -->
+      <a href="https://www.linkedin.com/posts/ben-carden-aa4a92329_how-id-close-3-b2b-clients-in-30-days-from-activity-7430597176700956674-NL0m/" target="_blank" style="text-decoration: none; display: block; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+        <img src="linkedin-ben.png" alt="Ben Carden LinkedIn post" style="width: 100%; border-radius: var(--radius-sm); box-shadow: var(--shadow-md); border: 1px solid var(--border);">
+      </a>
+
+      <!-- Hosun -->
+      <a href="https://www.linkedin.com/posts/hosun-chung_most-b2b-sales-teams-are-still-stuck-in-2015-activity-7430597149253337088-KWry/" target="_blank" style="text-decoration: none; display: block; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+        <img src="linkedin-fernando.png" alt="Fernando Cao LinkedIn post" style="width: 100%; border-radius: var(--radius-sm); box-shadow: var(--shadow-md); border: 1px solid var(--border);">
+      </a>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="footer-brand"><img src="revenueflow_logo_v2_transparent.png" alt="RevenueFlow"></div>
+    <div class="footer-url">revenueflow.com</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 9: CLIENT PROOF ==================== -->
+<div class="slide" data-slide="9">
+  <div class="slide-header">
+    <div class="logo">RevenueFlow</div>
+    <div class="badge">Playbook</div>
+  </div>
+  <div class="slide-body">
+    <h2>It works. <span class="highlight">Here's proof.</span></h2>
+    <div class="subtitle mb-md">Real results from real clients.</div>
+
+    <div class="grid-3">
+      <div class="case-card">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
+          <img src="client-terry-lynch.png" alt="Terry Lynch" style="width: 52px; height: 52px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">
+          <div>
+            <div class="case-industry">Public Commodities</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="case-name">Terry Lynch</div>
+          <img src="logo-power-metallic.png" alt="Power Metallic" style="height: 24px; object-fit: contain;">
+        </div>
+        <div class="case-stat">63%</div>
+        <div class="case-stat-label">Response Rate</div>
+        <div class="case-desc">Public mining company. Cold outreach to CFOs and Controllers - achieved response rates 10x industry average through precision targeting + warm signals.</div>
+        <div class="case-links">
+          <a href="https://www.revenueflow.com/case-studies/3" target="_blank" class="case-link">View case study</a>
+          <a href="https://www.linkedin.com/in/terry-lynch-lion18/" target="_blank" class="case-link">LinkedIn profile</a>
+        </div>
+      </div>
+
+      <div class="case-card">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
+          <img src="client-alan-vanderborght.png" alt="Alan Vanderborght" style="width: 52px; height: 52px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">
+          <div>
+            <div class="case-industry">Regulated Biotech M&A</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="case-name">Alan Vanderborght</div>
+          <img src="logo-kybora.png" alt="Kybora" style="height: 24px; object-fit: contain;">
+        </div>
+        <div class="case-stat">$250-300K</div>
+        <div class="case-stat-label">Pipeline Generated</div>
+        <div class="case-desc">M&A consultancy in biotech. 22% response rate. Built predictable pipeline in a vertical where "cold outreach doesn't work."</div>
+        <div class="case-links">
+          <a href="https://www.linkedin.com/in/alan-vanderborght-b18b8/" target="_blank" class="case-link">LinkedIn profile</a>
+        </div>
+      </div>
+
+      <div class="case-card">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
+          <img src="client-russ-hill.png" alt="Russ Hill" style="width: 52px; height: 52px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">
+          <div>
+            <div class="case-industry">Executive Leadership Consulting</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="case-name">Russ Hill</div>
+          <img src="logo-lone-rock.png" alt="Lone Rock Leadership" style="height: 24px; object-fit: contain;">
+        </div>
+        <div class="case-stat">$2.15M</div>
+        <div class="case-stat-label">Pipeline Generated</div>
+        <div class="case-desc">Grew from 800 to 25K LinkedIn followers. Content + outbound generated $2.15M in qualified pipeline. Scaled without adding a single SDR.</div>
+        <div class="case-links">
+          <a href="https://www.revenueflow.com/case-studies/8" target="_blank" class="case-link">View case study</a>
+          <a href="https://www.linkedin.com/in/russleads/" target="_blank" class="case-link">LinkedIn profile</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="agg-bar mt-md">
+      <div class="agg-num">60+</div>
+      <div class="agg-label">qualified meetings per month for RevenueFlow pipeline</div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="footer-brand"><img src="revenueflow_logo_v2_transparent.png" alt="RevenueFlow"></div>
+    <div class="footer-url">revenueflow.com</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 10: THE OFFER ==================== -->
+<div class="slide" data-slide="10">
+  <div class="slide-header">
+    <div class="logo">RevenueFlow</div>
+    <div class="badge">Playbook</div>
+  </div>
+  <div class="slide-body" style="padding-top: 24px; padding-bottom: 12px;">
+    <h2 style="font-size: 28px;">The <span class="highlight">Offer</span></h2>
+
+    <div class="offer-layout" style="margin-top: 16px;">
+      <!-- Left: Cost Comparison -->
+      <div>
+        <table class="compare-table" style="width: 100%;">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Old Way</th>
+              <th>With RevenueFlow</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>SDR team</td>
+              <td class="col-old">$200K+/year</td>
+              <td class="col-new">$0</td>
+            </tr>
+            <tr>
+              <td>Enterprise tools</td>
+              <td class="col-old">$60-120K/year</td>
+              <td class="col-new">Included</td>
+            </tr>
+            <tr>
+              <td>Management overhead</td>
+              <td class="col-old">$80K+/year</td>
+              <td class="col-new">$0</td>
+            </tr>
+            <tr>
+              <td>Ramp time</td>
+              <td class="col-old">3-6 months</td>
+              <td class="col-new">14 days</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800;">Total</td>
+              <td class="col-old">$370-450K/year</td>
+              <td class="col-new">$42-72K/year</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Right: Tier Cards -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; align-items: start;">
+        <div class="tier-card" style="padding: 20px 16px;">
+          <div class="tier-name" style="font-size: 18px;">Lite</div>
+          <div class="tier-price" style="font-size: 26px;">$3,500<span>/mo</span></div>
+          <div class="tier-desc" style="font-size: 13px;">One-channel GTM system.</div>
+          <ul>
+            <li>Outbound or Content GTM system setup</li>
+            <li>Live within 2 weeks</li>
+            <li>Cutting-edge AI tech stack (included)</li>
+            <li>Precise, signal-based data targeting</li>
+            <li>Full transparency campaign reporting</li>
+            <li>Inbox management</li>
+          </ul>
+        </div>
+
+        <div class="tier-card recommended" style="padding: 20px 16px;">
+          <div class="tier-badge">Recommended</div>
+          <div class="tier-name" style="font-size: 18px;">Growth</div>
+          <div class="tier-price" style="font-size: 26px;">$6,000<span>/mo</span></div>
+          <div class="tier-desc" style="font-size: 13px;">Content + outbound together.</div>
+          <ul>
+            <li>Everything in Lite, plus:</li>
+            <li>Content + outbound + cold email (full-channel)</li>
+            <li>Multi-channel signal detection</li>
+            <li>Founder brand content program</li>
+            <li>AI-powered reply management</li>
+            <li>Priority support</li>
+          </ul>
+        </div>
+
+        <div class="tier-card" style="padding: 20px 16px;">
+          <div class="tier-name" style="font-size: 18px;">Scale</div>
+          <div class="tier-price" style="font-size: 26px;">Custom</div>
+          <div class="tier-desc" style="font-size: 13px;">Full GTM infrastructure.</div>
+          <ul>
+            <li>Everything in Growth, plus:</li>
+            <li>Multiple founder profiles</li>
+            <li>Custom AI agent builds</li>
+            <li>Fractional SDR team</li>
+            <li>Full revenue infrastructure</li>
+            <li>White-glove onboarding</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Guarantee -->
+    <div class="guarantee">
+      <div class="shield">🛡️</div>
+      <div class="guarantee-text">
+        We will build you a <span class="gold">profitable pipeline in 90 days.</span>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="footer-brand"><img src="revenueflow_logo_v2_transparent.png" alt="RevenueFlow"></div>
+    <div class="footer-url">revenueflow.com</div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- Navigation -->
+<div class="nav-dots" id="navDots"></div>
+<div class="slide-num" id="slideNum">1 / 10</div>
+<button class="fullscreen-btn" id="fullscreenBtn" title="Press F for fullscreen">⛶ Fullscreen</button>
+
+<script>
+(function() {
+  const TOTAL = 10;
+  let current = 1;
+
+  const slides = document.querySelectorAll('.slide');
+  const navDots = document.getElementById('navDots');
+  const slideNum = document.getElementById('slideNum');
+
+  // Build dots
+  for (let i = 1; i <= TOTAL; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 1 ? ' active' : '');
+    dot.dataset.slide = i;
+    dot.addEventListener('click', () => goTo(i));
+    navDots.appendChild(dot);
+  }
+
+  function goTo(n) {
+    if (n < 1 || n > TOTAL) return;
+    slides.forEach(s => s.classList.remove('active'));
+    document.querySelector(`[data-slide="${n}"]`).classList.add('active');
+    document.querySelectorAll('.nav-dot').forEach(d => d.classList.toggle('active', +d.dataset.slide === n));
+    slideNum.textContent = `${n} / ${TOTAL}`;
+    current = n;
+  }
+
+  // Keyboard nav
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      goTo(current + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      goTo(current - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goTo(1);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goTo(TOTAL);
+    } else if (e.key === 'f' || e.key === 'F') {
+      toggleFullscreen();
+    } else if (e.key === 'Escape') {
+      if (document.fullscreenElement) document.exitFullscreen();
+    }
+  });
+
+  // Touch swipe
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      diff > 0 ? goTo(current + 1) : goTo(current - 1);
+    }
+  });
+
+  // Fullscreen
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen();
+    }
+  }
+
+  document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
+
+  // Hide cursor & UI on idle (presentation mode)
+  let idleTimer;
+  function showUI() {
+    document.body.style.cursor = '';
+    navDots.style.opacity = '1';
+    slideNum.style.opacity = '1';
+    document.getElementById('fullscreenBtn').style.opacity = '1';
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(hideUI, 3000);
+  }
+  function hideUI() {
+    if (document.fullscreenElement) {
+      document.body.style.cursor = 'none';
+      navDots.style.opacity = '0';
+      slideNum.style.opacity = '0';
+      document.getElementById('fullscreenBtn').style.opacity = '0';
+    }
+  }
+  document.addEventListener('mousemove', showUI);
+  document.addEventListener('keydown', showUI);
+
+  // Style transitions for nav hiding
+  [navDots, slideNum, document.getElementById('fullscreenBtn')].forEach(el => {
+    el.style.transition = 'opacity 0.5s';
+  });
+})();
+</script>
+
+</body>
+</html>
